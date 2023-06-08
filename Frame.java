@@ -14,7 +14,11 @@ import javax.swing.JFrame;
 public class Frame extends JFrame{
     
     final int WINDOW_WIDTH = 700;
-    final int WINDOW_HEIGHT = 800;
+    final int WINDOW_HEIGHT = 500;
+    
+    private Panel mainMenu;
+    private Panel inputPanel;
+    private Panel showPanel;
 
     public Frame(String name) {
         super(name);
@@ -23,39 +27,59 @@ public class Frame extends JFrame{
         setSize(WINDOW_WIDTH, 135);
         setLocationRelativeTo(null);
         setResizable(false);
-        setVisible(true);
+        setVisible(true);        
         
-        setMainMenuPanel();
-        setInputPanel();        
+        inputPanel = new Panel(0, 100, WINDOW_WIDTH, 200);        
+        showPanel = new Panel(0, 100, WINDOW_WIDTH, 350);        
+                
+        setMainMenuPanel();                
+        inputPanel.setInputPanel(); 
+        setShowPanel();
+        
+        getContentPane().add(inputPanel);
+        getContentPane().add(showPanel);
+        Lists.addPanel(inputPanel);
+        Lists.addPanel(showPanel);
     }
     
     private void setMainMenuPanel(){
-        Panel mainMenu = new Panel(0, 0, WINDOW_WIDTH, 100);
+        mainMenu = new Panel(0, 0, WINDOW_WIDTH, 100);
         mainMenu.setBackground(Color.LIGHT_GRAY);
         mainMenu.setVisible(true);                
         getContentPane().add(mainMenu);
         
         Button.setFrame(this);
-        Button buttonShow = new Button("Show employees", 20, 30, 150); 
-        buttonShow.addMainMenuListener();
+        Check.setFrame(this);
+        
+        int y = 30;
+        int width = 150;
+        
+        MainButton buttonShow = new MainButton(English.showEmp, 60, y, width); 
+        buttonShow.addShow(showPanel);
+        Lists.addMenuButton(buttonShow);
         mainMenu.add(buttonShow);
         
-        Button buttonAdd = new Button("Add new employee", 185, 30, 150);                        
-        buttonAdd.addMainMenuListener();
+        MainButton buttonAdd = new MainButton(English.addEmp, 270, y, width); 
+        buttonAdd.addEmployee(inputPanel);
+        Lists.addMenuButton(buttonAdd);
         mainMenu.add(buttonAdd);
         
-        Button buttonRemove = new Button("Remove employee", 350, 30, 150);  
-        buttonRemove.addMainMenuListener();
-        mainMenu.add(buttonRemove);
+        MainButton buttonModify = new MainButton(English.modifyEmp, 480, y, width);          
+        Lists.addMenuButton(buttonModify);
+        mainMenu.add(buttonModify);        
+    }    
+    
+    private void setShowPanel(){        
+        int y = 20;
+        Button showAll = new Button(English.showAll, 20, y, 150);
+        Button showEmployeesOnly = new Button(English.employeeClass, 180, y, 150);
+        Button showBonusOnly = new Button(English.bonusClass, 340, y, 160);
+        Button showInternOnly = new Button(English.internClass, 510, y, 150);
+        showPanel.add(showAll);
+        showPanel.add(showEmployeesOnly);
+        showPanel.add(showBonusOnly);
+        showPanel.add(showInternOnly);
         
-        Button buttonUpdate = new Button("Update employee", 515, 30, 150); 
-        buttonUpdate.addMainMenuListener();
-        mainMenu.add(buttonUpdate);
     }
     
-    private void setInputPanel(){
-        Panel inputPanel = new Panel(0, 100, WINDOW_WIDTH, 200);
-        inputPanel.setInputPanel();                 
-        getContentPane().add(inputPanel);
-    }
 }

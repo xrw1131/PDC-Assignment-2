@@ -12,8 +12,12 @@ public class WorkforcePlanner{
     
     public static void main(String[] args) {
         
-        Frame wfp = new Frame("Workforce Planner");     
+        Frame wfp = new Frame(English.frame);// User Interface
         
+        for (Employee e: Lists.getEmployeeList()){
+            System.out.println(e);
+        }
+            
         
     }
     

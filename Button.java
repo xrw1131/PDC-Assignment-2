@@ -4,8 +4,6 @@
  */
 package workforceplanner;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 /**
@@ -15,25 +13,17 @@ import javax.swing.JButton;
 public class Button extends JButton{
     
     private final int BUTTON_HEIGHT = 30;
-    private static Frame frame;
+    protected static Frame frame;
     
-    public Button(String name, int x, int y, int width) {
+    
+    public Button(String name, int x, int y, int width) {//constructor
         super(name);
         setLayout(null);
         setBounds(x, y, width, BUTTON_HEIGHT);
     }
     
-    public static void setFrame(Frame frame){
+    public static void setFrame(Frame frame){//setting static variable frame. Necessary for adjusting frame size
         Button.frame = frame;        
     }
-    
-    public void addMainMenuListener(){
-        ActionListener MainMenuListener = (ActionEvent e) -> {
-            if (frame.getHeight() != frame.WINDOW_HEIGHT){
-                frame.setSize(frame.WINDOW_WIDTH, frame.WINDOW_HEIGHT);
-                frame.setLocationRelativeTo(null);
-            }                
-        };
-        addActionListener(MainMenuListener);
-    }
+
 }
