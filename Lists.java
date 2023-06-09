@@ -15,8 +15,8 @@ public class Lists {
     private static ArrayList<Panel> panelList = new ArrayList<>();
     
     private static ArrayList<Employee> employeeList = new ArrayList<>();
-    //private static ArrayList<ArrayList<Bonus>> bonusList = new ArrayList<>();
-    //private static ArrayList<Intern> internList = new ArrayList<>();
+    private static ArrayList<Bonus> bonusList = new ArrayList<>();
+    private static ArrayList<Intern> internList = new ArrayList<>();
     
     public static ArrayList<Button> getMenuButtonList(){//get method for menuButtonList
         return menuButtonList;
@@ -24,15 +24,22 @@ public class Lists {
     
     public static ArrayList<Panel> getPanelList(){//get method for panelList
         return panelList;
-    }
-        
+    }        
 
     public static ArrayList<Employee> getEmployeeList() {//get method for employeeList
         return employeeList;
     }    
     
-        
-    public static void addMenuButton(MainButton mainButton){//add method for menuButtonList
+    public static ArrayList<Bonus> getBonusList() {//get method for bonusList 
+        return bonusList;
+    }
+    
+    public static ArrayList<Intern> getInternList() {//get method for internList
+     return internList;
+    }
+    
+    //add methods
+    public static void addMenuButton(MainButtons mainButton){//add method for menuButtonList
         menuButtonList.add(mainButton);
     }
     
@@ -44,21 +51,15 @@ public class Lists {
         employeeList.add(employee);
     }
     
-    /**
-     *public static ArrayList<Bonus> getBonusList() {//get method for bonusList 
-     * return bonusList;
-     * 
-     public static ArrayList<Intern> getInternList() {//get method for internList
-     return internList;
-     * 
-     */
-    
-    /**
-     * public static void addBonus(Bonus bonus){//add method for bonusList
+    public static void addBonus(Bonus bonus){//add method for bonusList
         bonusList.add(bonus);
-    }
-    * public static void addIntern(Intern intern){//add method for internList
+    }    
+    
+    public static void addIntern(Intern intern){//add method for internList
         internList.add(intern);
     }
-     */
+    
+    public static int sizeEmpB(){//get method for both employeeList & bonusList
+        return employeeList.size() + bonusList.size();
+    }
 }

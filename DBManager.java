@@ -10,33 +10,31 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  *
  * @author xrw1131
  */
-public class DBManager {
-    private static final String USER_NAME = "xrw1131"; 
-    private static final String PASSWORD = "pdc"; 
-    private static final String URL = "jdbc:derby:WorkforcePlanner_Ebd; create=true";  
+public class DBManager {      
 
     private Connection conn;    
 
-    public DBManager() {
+    public DBManager(String URL, String userName, String password) {//constructor
         if (this.conn == null) {
             try {
-                conn = DriverManager.getConnection(URL, USER_NAME, PASSWORD);                                
+                conn = DriverManager.getConnection(URL, userName, password);                                
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
         }
     }
 
-    public Connection getConnection() {
+    public Connection getConnection() {//get method
         return this.conn;
     }
     
-    public void closeConnections() {
+    public void closeConnections() {//close method
         if (conn != null) {
             try {
                 conn.close();
@@ -46,40 +44,32 @@ public class DBManager {
         }
     }
     
-    public void createTable(){
-        try {           
+    public void createTable(String tableName, String fields){//create tables method
+        if (!checkTable(tableName))
+        {
+            try {
+                Statement statement;
+                statement = conn.createStatement();
+                statement.executeUpdate("CREATE TABLE " + tableName + " (" + fields + ")");
+                
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }        
+    }    
+    
+    public void insertRecord(String tableName, String values){//create new record method
+        try {            
             Statement statement;
             statement = conn.createStatement();
-            statement.addBatch("CREATE  TABLE BOOK  (BOOKID  INT,   TITLE   VARCHAR(50),   CATEGORY   VARCHAR(20),   PRICE   FLOAT)");
-            statement.executeBatch();
+            statement.executeUpdate("INSERT INTO " + tableName + " VALUES (" + values + ")");            
+            
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());            
         }
     }    
     
-    public void insertRecord(){
-        try {            
-            Statement statement;
-            statement = conn.createStatement();
-            statement.addBatch("INSERT INTO BOOK VALUES (1, 'Slum Dog Millionaire', 'Fiction', 19.90)");
-            statement.executeBatch();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());            
-        }
-    }
-    
-    public void updateDB(String sql) {
-        try {
-            Statement statement;
-            statement = conn.createStatement();            
-            statement.executeUpdate(sql);
-
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-    }
-    
-    public ResultSet queryDB(String sql) {
+    public ResultSet queryDB(String sql) {//create queries and return result set
         ResultSet resultSet = null;
 
         try {
@@ -92,8 +82,52 @@ public class DBManager {
         }
         return resultSet;
     }
+    
+    
+    public void updateDB(String sql) {//generic sql method
+        try {
+            Statement statement;
+            statement = conn.createStatement();            
+            statement.executeUpdate(sql);
 
-    private boolean checkTable(String tableName) {
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+    
+    public void getAllReccords(String tableName, ArrayList arrayList) {//copies all records from database 
+        try {
+            ResultSet resultSet = queryDB("SELECT * FROM " + tableName);
+            while (resultSet.next()) {
+                String id = resultSet.getString(1);
+                String lastName = resultSet.getString(2);
+                String firstName = resultSet.getString(3);
+                int salary = resultSet.getInt(4);
+                
+                switch (tableName) {
+                    case WorkforcePlanner.TABLE_BON:
+                        int bonus = resultSet.getInt(5);
+                        Bonus newBonus = new Bonus(id, lastName, firstName, salary, bonus);
+                        arrayList.add(newBonus);
+                        break;
+                    case WorkforcePlanner.TABLE_EMP:
+                        Employee newEmployee = new Employee(id, lastName, firstName, salary);
+                        arrayList.add(newEmployee);
+                        break;
+                    case WorkforcePlanner.TABLE_INT:
+                        Intern newIntern = new Intern(id, lastName, firstName, salary);
+                        arrayList.add(newIntern);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }                
+    }
+
+    private boolean checkTable(String tableName) {//checks whether table already exists
         try {
             DatabaseMetaData meta = conn.getMetaData();
             ResultSet resultSet = meta.getTables(null, null, tableName.toUpperCase(), new String[] {"TABLE"});
@@ -102,13 +136,6 @@ public class DBManager {
             System.out.println(ex.getMessage());
         }      
         return false;
-    }  
-    
-    public static void main(String[] args) {
-        DBManager dbManager = new DBManager();
+    }     
         
-        //dbManager.drop();
-        dbManager.closeConnections();
-    }
-
 }

@@ -8,9 +8,9 @@ package workforceplanner;
  *
  * @author xrw1131
  */
-public class English {//stores the English display strings for all swing components   
+public class English {//stores the English display strings for all swing components, plus static functions   
     static String frame = "Workforce Planner";
-    static String showAll = "Show all";
+    static String showAll = "Show all";    
     
     //worker classes
     static String employeeClass = "Employee";
@@ -33,6 +33,7 @@ public class English {//stores the English display strings for all swing compone
     
     //input panel button/s 
     static String addButton = "Add";
+    static String modifyButton = "Confirm changes";
     
     //error messages
     static String invalidInput = "Invalid Input";
@@ -42,4 +43,27 @@ public class English {//stores the English display strings for all swing compone
     //message dialog
     static String success = "Success";
     static String addEmpSuccess = "Successfully added new employee.";
+    static String addBonusSuccess = "Successfully added new employee with bonus.";
+    static String addIntSuccess = "Successfully added new intern.";
+    
+    //JList messages
+    static String JListInitial = "Please choose a button to view the corresponding data type.";
+    static String JListInitialModify = "Select the employee type, then select the employee you wish to modify";
+    static String JListNone = "No record currently available.";
+    
+    
+    public static String toString(Worker worker){ // static toString method for each of the worker subclasses
+        String output = worker.getId() + "  ";        
+        output += worker.getFullName() + ",  $";
+        output += worker.getSalary();
+        if (worker instanceof Bonus){
+            Bonus temp = (Bonus)worker;
+            output += " per annum (excl. bonus " + temp.getBonus() + "%)";
+        } 
+        else if (worker instanceof Employee)
+            output += " per annum";           
+        else if (worker instanceof Intern)
+            output += " per month";
+        return output;
+    }
 }

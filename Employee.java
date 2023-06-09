@@ -8,55 +8,27 @@ package workforceplanner;
  *
   * @author xrw1131
  */
-public class Employee extends Worker {    
-    private int salary;
-    private String id;
-    private static String type = English.employeeClass;
-    private static int counter = 0;
+public class Employee extends Worker {        
+    
+    private static String type = English.employeeClass;    
+    
+    public Employee(String id, String lastName, String firstName, int salary) {//constructor
+        super(id, lastName, firstName, salary);                
+    } 
     
     public Employee(String lastName, String firstName, int salary) {//constructor
-        super(lastName, firstName);
-        this.salary = salary;  
-        counter++;        
-        this.id = counter + "";
+        super(lastName, firstName, salary);        
+                
+        this.id = (Lists.sizeEmpB() + 1)+ "";
         while(this.id.length() < 4)
             this.id = "0" + this.id;
-        this.id = lastName.toUpperCase().charAt(0) + firstName.toUpperCase().charAt(0) + this.id;
+        this.id = firstName.toUpperCase().charAt(0) + this.id;
+        this.id = lastName.toUpperCase().charAt(0) + this.id;
     }    
+  
     
     public static String getType(){//get method
         return type;
-    }
-
-    public int getSalary() {
-        return salary;
-    }
-    
-    
-/**
-    public static int getBaseSalary() {//get method
-        return baseSalary;
-    }
-
-    public int getAddSalary() {//get method
-        return addSalary;
-    }
-
-    public static void setBaseSalary(int baseSalary) {//set method
-        Employee.baseSalary = baseSalary;
-    }
-
-    public void setAddSalary(int addSalary) {//set method
-        this.addSalary = addSalary;
-    }
-    
-    public int getTotalSalary(){//get method
-        return baseSalary + this.addSalary;
-    }
-    */
-    @Override
-    public String toString(){//toString method
-        return getFirstName() + " " + getLastName() + ": $" + getSalary() + " per annum";
-    }    
+    }     
     
 }

@@ -54,10 +54,18 @@ public class Panel extends JPanel{
         setVisible(true);  
     }
     
-    public void setInputPanel(){
-        //setBackground(Color.yellow);                                          //remember to remove this line
-        //this.setVisible(true);
-        
+    public void setInputPanel(){                
+        setComponents();               
+        setAddButton(English.addButton);        
+    }
+    
+    public void setModifyPanel(){
+        setComponents();        
+        setModifyButton();
+        setAddButton(English.modifyButton);
+    }
+    
+    private void setComponents(){//setting the major swing components
         labelFirstName = new JLabel(English.empFirstname);
         labelFirstName.setBounds(20, 10, 200, 30);
         add(labelFirstName);
@@ -100,8 +108,7 @@ public class Panel extends JPanel{
         spinBonus.setVisible(false);
         add(spinBonus);
         
-        setButtonGroupType();        
-        setAddButton();        
+        setButtonGroupType(); 
     }
     
     private void setButtonGroupType(){ // setting the radio buttons and grouping them
@@ -159,8 +166,8 @@ public class Panel extends JPanel{
         
     }
     
-    private void setAddButton(){//setting the add button
-        Button buttonAdd = new Button(English.addButton, 515, 50, 150);
+    private void setAddButton(String title){//setting the add button
+        Button buttonAdd = new Button(title, 515, 50, 150);
         ActionListener addListener = (ActionEvent e) -> {
             if(Check.textField(tfFirstName, English.errorFirstname))
                 if(Check.textField(tfLastName, English.errorLastname)){
@@ -170,17 +177,21 @@ public class Panel extends JPanel{
 
                     if (input.equals(English.employeeClass) || input.equals(English.bonusClass)) {
                         int salary = (int) spinEmpSalary.getValue();
-                        if (input.equals(English.bonusClass)) {//only for bonus employee
+                        if (input.equals(English.bonusClass)) {//creating a new bonus employee
                             int bonus = (int) spinBonus.getValue();
-
-                        } else {//only for regular employee
+                            Bonus newBonus = new Bonus(lastName, firstName, salary, bonus);
+                            Lists.addBonus(newBonus);
+                            JOptionPane.showMessageDialog(frame, English.addBonusSuccess, English.success, JOptionPane.PLAIN_MESSAGE);
+                        } else {//creating a new regular employee
                             Employee newEmployee = new Employee(lastName, firstName, salary);
                             Lists.addEmployee(newEmployee);
                             JOptionPane.showMessageDialog(frame, English.addEmpSuccess, English.success, JOptionPane.PLAIN_MESSAGE);
                         }
-                    } else if (input.equals(English.internClass)) {//only for interns
+                    } else if (input.equals(English.internClass)) {//creating a new interns
                         int salary = (int) spinIntSalary.getValue();
-
+                        Intern newIntern = new Intern(lastName, firstName, salary);
+                        Lists.addIntern(newIntern);
+                        JOptionPane.showMessageDialog(frame, English.addIntSuccess, English.success, JOptionPane.PLAIN_MESSAGE);
                     }
 
                     //resets input fields
@@ -189,10 +200,15 @@ public class Panel extends JPanel{
                     spinEmpSalary.setValue(50000);
                     spinIntSalary.setValue(3500);
                     spinBonus.setValue(1);
+                    tfFirstName.requestFocus();
                 }            
         };//end of listener
         
         buttonAdd.addActionListener(addListener);
         add(buttonAdd);
+    }
+    
+    private void setModifyButton(){
+        
     }
 }

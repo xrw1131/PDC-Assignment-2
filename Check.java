@@ -19,7 +19,7 @@ public class Check {
         Check.frame = frame;        
     }
     
-    public static boolean textField(JTextField textField, String errorMessage){
+    public static boolean textField(JTextField textField, String errorMessage){//tests whether textField has valid input
         String input = textField.getText().trim();
         boolean valid = true;
         if (input.length() == 0){            
